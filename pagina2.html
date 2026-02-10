@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tienda - Catálogo</title>
+
+<!-- Tipografía Premium Combinada -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+
+
+<link rel="stylesheet" href="css/pagina2.css">
+
+<body>
+
+<div class="marco-app">
+
+<header class="nav">
+<div class="logo">Prizmoo</div>
+<nav class="menu">
+<a href="#" data-modal="modal-carrito">Carrito</a>
+<a href="#" class="btn-outline" data-modal="modal-menu">°°°</a>
+</nav>
+</header>
+
+<section class="banner">
+<img src="imagenes/banner.jpg" alt="">
+</section>
+
+<div class="contenido">
+
+<aside class="sidebar">
+<button class="activo" data-categoria="nuevo">Playeras</button>
+<button data-categoria="abrigos">Gorras</button>
+<button data-categoria="blusas">Maquillaje</button>
+</aside>
+
+<main class="productos">
+<h1 id="titulo-categoria">NUEVO</h1>
+<div class="grid-productos" id="grid-productos"></div>
+</main>
+
+</div>
+
+<footer class="footer">
+© 2026 · Todos los derechos reservados
+</footer>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+<div class="modal-contenido" id="modal-contenido"></div>
+</div>
+
+<!-- TU SCRIPT ORIGINAL COMPLETO (INTACTO) -->
+<script>
+const productos={
+nuevo:[
+{img:"imagenes/modelo1.jpg",nombre:"Nuevo Producto",precio:"$1,299 MXN"},
+{img:"imagenes/modelo2.jpg",nombre:"Nuevo Producto",precio:"$1,499 MXN"},
+{img:"imagenes/placeholder3.jpg",nombre:"Nuevo Producto",precio:"$1,599 MXN"},
+{img:"imagenes/placeholder4.jpg",nombre:"Nuevo Producto",precio:"$1,899 MXN"}
+],
+abrigos:[
+{img:"imagenes/modelo1.jpg",nombre:"Nuevo Producto",precio:"$1,299 MXN"},
+{img:"imagenes/modelo2.jpg",nombre:"Nuevo Producto",precio:"$1,499 MXN"},
+{img:"imagenes/placeholder3.jpg",nombre:"Nuevo Producto",precio:"$1,599 MXN"},
+{img:"imagenes/placeholder4.jpg",nombre:"Nuevo Producto",precio:"$1,899 MXN"}
+],
+blusas:[
+{img:"imagenes/modelo1.jpg",nombre:"Nuevo Producto",precio:"$899 MXN"},
+{img:"imagenes/modelo2.jpg",nombre:"Nuevo Producto",precio:"$799 MXN"},
+{img:"imagenes/modelo3.jpg",nombre:"Nuevo Producto",precio:"$999 MXN"},
+{img:"imagenes/modelo4.jpg",nombre:"Nuevo Producto",precio:"$1,099 MXN"},
+{img:"imagenes/placeholder1.jpg",nombre:"Nuevo Producto",precio:"$999 MXN"},
+{img:"imagenes/placeholder2.jpg",nombre:"Nuevo Producto",precio:"$1,099 MXN"},
+{img:"imagenes/placeholder3.jpg",nombre:"Nuevo Producto",precio:"$1,199 MXN"},
+{img:"imagenes/placeholder4.jpg",nombre:"Nuevo Producto",precio:"$899 MXN"}
+],
+sueteres:[]
+};
+
+/* =========================================
+   NOMBRES VISUALES EDITABLES
+   SOLO CAMBIA AQUÍ LOS TEXTOS
+========================================= */
+
+const nombresCategorias = {
+  nuevo: "Productos",
+  abrigos: "Productos",
+  blusas: "Productos",
+};
+
+
+const grid=document.getElementById("grid-productos");
+const titulo=document.getElementById("titulo-categoria");
+const botones=document.querySelectorAll(".sidebar button");
+const modal=document.getElementById("modal");
+const modalContenido=document.getElementById("modal-contenido");
+
+function cargarProductos(cat){
+grid.classList.add("fade");
+
+setTimeout(()=>{
+grid.innerHTML="";
+productos[cat].forEach(prod=>{
+grid.innerHTML+=`
+<div class="producto" onclick="abrirModal('${prod.img}','${prod.nombre}','${prod.precio}')">
+<img src="${prod.img}">
+<p>${prod.nombre}</p>
+<span>${prod.precio}</span>
+</div>
+`;
+});
+
+/* 👇 AQUÍ CAMBIAMOS SOLO EL TÍTULO VISUAL */
+titulo.textContent = (nombresCategorias[cat] || cat).toUpperCase();
+
+grid.classList.remove("fade");
+},300);
+}
+
+function abrirModal(img,nombre,precio){
+modalContenido.innerHTML=`
+<img src="${img}">
+<h2>${nombre}</h2>
+<p style="margin:10px 0;font-weight:600">${precio}</p>
+`;
+modal.classList.add("activo");
+}
+
+modal.addEventListener("click",()=>modal.classList.remove("activo"));
+
+botones.forEach(b=>{
+b.addEventListener("click",()=>{
+botones.forEach(x=>x.classList.remove("activo"));
+b.classList.add("activo");
+cargarProductos(b.dataset.categoria);
+});
+});
+
+cargarProductos("nuevo");
+</script>
+
+
+  <!-- MODAL CARRITO -->
+  <div class="modal-overlay" id="modal-carrito">
+    <div class="modal-panel">
+      <button class="close-modal">&times;</button>
+      <h2>Tu carrito</h2>
+      <p>Aquí aparecerán los productos seleccionados.</p>
+    </div>
+  </div>
+
+  <!-- MODAL MENU -->
+  <div class="modal-overlay" id="modal-menu">
+    <div class="modal-panel">
+      <button class="close-modal">&times;</button>
+      <h2>Opciones</h2>
+      <p>Configuraciones y más secciones aquí.</p>
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+
+    const triggers = document.querySelectorAll("[data-modal]");
+    const overlays = document.querySelectorAll(".modal-overlay");
+
+    triggers.forEach(trigger => {
+      trigger.addEventListener("click", e => {
+        e.preventDefault();
+        const modalId = trigger.dataset.modal;
+        const modal = document.getElementById(modalId);
+
+        if (modal) {
+          modal.classList.add("active");
+          document.body.style.overflow = "hidden";
+        }
+      });
+    });
+
+    overlays.forEach(overlay => {
+
+      const closeBtn = overlay.querySelector(".close-modal");
+
+      closeBtn.addEventListener("click", () => {
+        overlay.classList.remove("active");
+        document.body.style.overflow = "";
+      });
+
+      overlay.addEventListener("click", e => {
+        if (e.target === overlay) {
+          overlay.classList.remove("active");
+          document.body.style.overflow = "";
+        }
+      });
+
+    });
+
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") {
+        overlays.forEach(o => o.classList.remove("active"));
+        document.body.style.overflow = "";
+      }
+    });
+
+  });
+  </script>
+
+</body>
+</html>

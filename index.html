@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prizmoo — Discover Hidden Gems</title>
+
+  <!-- Tipografía Premium Combinada -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+
+
+  <link rel="stylesheet" href="css/estilos.css">
+
+  <style>
+  /* =========================
+     MODAL ESTILO APPLE
+  ========================== */
+
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.15);
+    backdrop-filter: blur(10px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.35s ease;
+    z-index: 1000;
+  }
+
+  .modal-panel {
+    position: absolute;
+    top: 80px;
+    right: 8%;
+    width: min(380px, 90%);
+    background: #fff;
+    padding: 40px;
+    border-radius: 18px;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.15);
+
+    transform-origin: top right;
+    transform: translateY(-20px) scale(0.95);
+    opacity: 0;
+    transition: all 0.35s cubic-bezier(.16,.84,.44,1);
+  }
+
+  .modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .modal-overlay.active .modal-panel {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+
+  .close-modal {
+    position: absolute;
+    top: 15px;
+    right: 18px;
+    border: none;
+    background: none;
+    font-size: 1.4rem;
+    cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    .modal-panel {
+      right: 5%;
+      width: 90%;
+      top: 70px;
+    }
+  }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <header class="nav">
+    <div class="logo">Prizmoo</div>
+
+    <nav class="menu">
+      <a href="#" data-modal="modal-carrito">Carrito</a>
+      <a href="#" class="btn-outline" data-modal="modal-menu">°°°</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+
+    <div class="hero-text">
+      <h1>
+        Discover <br>
+        Hidden Gems
+      </h1>
+
+      <p>
+        Unlock wisdom from the most famous and forgotten quotes, 
+        curated and ranked by our team of quote-loving editors.
+      </p>
+
+      <a href="PAGINA2.html" class="btn-primary">
+        Comencemos
+      </a>
+    </div>
+
+    <div class="hero-image">
+      <img src="imagenes/jajaja.PNG" alt="Illustration">
+    </div>
+
+  </section>
+
+  <footer class="footer">
+    © 2026 · Todos los derechos reservados
+  </footer>
+
+  <!-- MODAL CARRITO -->
+  <div class="modal-overlay" id="modal-carrito">
+    <div class="modal-panel">
+      <button class="close-modal">&times;</button>
+      <h2>Tu carrito</h2>
+      <p>Aquí aparecerán los productos seleccionados.</p>
+    </div>
+  </div>
+
+  <!-- MODAL MENU -->
+  <div class="modal-overlay" id="modal-menu">
+    <div class="modal-panel">
+      <button class="close-modal">&times;</button>
+      <h2>Opciones</h2>
+      <p>Configuraciones y más secciones aquí.</p>
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+
+    const triggers = document.querySelectorAll("[data-modal]");
+    const overlays = document.querySelectorAll(".modal-overlay");
+
+    triggers.forEach(trigger => {
+      trigger.addEventListener("click", e => {
+        e.preventDefault();
+        const modalId = trigger.dataset.modal;
+        const modal = document.getElementById(modalId);
+
+        if (modal) {
+          modal.classList.add("active");
+          document.body.style.overflow = "hidden";
+        }
+      });
+    });
+
+    overlays.forEach(overlay => {
+
+      const closeBtn = overlay.querySelector(".close-modal");
+
+      closeBtn.addEventListener("click", () => {
+        overlay.classList.remove("active");
+        document.body.style.overflow = "";
+      });
+
+      overlay.addEventListener("click", e => {
+        if (e.target === overlay) {
+          overlay.classList.remove("active");
+          document.body.style.overflow = "";
+        }
+      });
+
+    });
+
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") {
+        overlays.forEach(o => o.classList.remove("active"));
+        document.body.style.overflow = "";
+      }
+    });
+
+  });
+  </script>
+
+</body>
+</html>
